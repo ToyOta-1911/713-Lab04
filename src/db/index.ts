@@ -5,7 +5,7 @@ const pool = new Pool({
     user: 'admin',
     password: 'admin123',
     host: 'localhost',
-    port: 5432,
+    port: 51213,
     database: 'mydatabase'
 })
 type QueryParam = string | number | boolean | Date | null | undefined;

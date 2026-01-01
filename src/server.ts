@@ -1,10 +1,13 @@
 import express, {Request, Response} from 'express'
-import { getAllEvents, getEventByCategory, getEventById, addEvent } from "./services/EventService";
+//import { getAllEvents, getEventByCategory, getEventById, addEvent } from "./services/EventService";
 import type Event from "./models/Event";
+import eventRoute from './route/EventRoute';
+import router from "./route/EventRoute";
 
 const app = express()
 const port = 3000
 app.use(express.json())
+app.use('/',eventRoute);
 
 
 app.get('/', (req: Request, res: Response) => {
@@ -29,31 +32,21 @@ app.get('/test', (req, res) => {
     }
     res.send(returnObj);
 })
-app.get("/events/:id", async (req, res) => {
-    const id = parseInt(req.params.id);
-    const event = await getEventById(id);
-    if (event) {
-        res.json(event);
-    } else {
-        res.status(404).send("Event not found");
-    }
-});
 
-app.get("/events", async (req, res) => {
-    if (req.query.category) {
-        const category = req.query.category as string;
-        const filteredEvents = await getEventByCategory(category);
-        res.json(filteredEvents);
-    } else {
-        res.json(await getAllEvents());
-    }
-});
+    router.get("/events", async(req, res) => {
+    if (req.query.pageSize && req.query.pageNo) {
+    const pageSize = parseInt(req.query.pageSize as string);
+    const pageNo = parseInt(req.query.pageNo as string);
+    const events = await service.getAllEventsWithPagination(pageSize, pageNo);
+    const totalEvents = await service.count();
+    res.json({ totalEvents, events });
+    res.json(await service.getAllEventsWithPagination(pageSize, pageNo));
+    res.setHeader("x-total-count", totalEvents.toString());
+    res.json(events);
+    } else if (req.query.category) {
+     const category = req.query.category;
+    })
 
-app.post("/events", async (req, res) => {
-    const newEvent: Event = req.body;
-
-    res.json(await addEvent(newEvent));
-});
 
 
 

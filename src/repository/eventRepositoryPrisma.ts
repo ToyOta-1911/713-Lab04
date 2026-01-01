@@ -1,5 +1,6 @@
 import { prisma } from '../lib/prisma'
 import type { eventModel as Event } from "../generated/prisma/models/event"
+import {Prisma} from "@prisma/client/extension";
 
 /* ===========================
    GET
@@ -79,4 +80,49 @@ export function getAllEventsWithOrganizer() {
       },
     },
   })
+}
+export async function getAllEventsWithOrganizerPagination(
+    keyword: string,
+  pageSize: number,
+  pageNo: number
+) {
+  const where = {
+    OR: [
+        {title: {contains: keyword,
+                    mode: Prisma.QueryMode.insensitive}},
+        {description: {contains: keyword}},
+       {category: {contains: keyword}},
+        { organizer: { name: { contains: keyword } } }
+    ]
+
+  }
+  const events = await prisma.event.findMany({
+    skip: pageSize * (pageNo - 1),
+    take: pageSize,
+    select: {
+      id: true,
+      book_title: true,
+      member_name: true,
+      borrow_date: true,
+      due_date: true,
+      returned_date: true,
+      organizer: {
+        select: {
+         name: true
+        }
+      }
+    }
+
+  });
+}
+
+function where() {
+
+}
+
+const count = await prisma.event.count({ where });
+  return { count, events } as unknown as PageEvent;
+
+export function countEvent() {
+  return prisma.event.count();
 }
