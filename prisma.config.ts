@@ -10,6 +10,7 @@ export default defineConfig({
     seed: 'tsx prisma/seed.ts'
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    //url: process.env["DATABASE_URL"],
+    url: process.env["postgresql://postgres.tgasbyyxotwjvvouftkp:[Toycharn191145]@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres"],
   },
 });

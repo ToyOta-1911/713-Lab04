@@ -20,11 +20,11 @@ export default interface Event {
   // Borrow info
   borrow_date: Date;
   due_date: Date;
-  returned_date?: Date | null;
+  returned_date: Date | null;
 
   // Organizer (optional)
-  organizerId?: number | null;
-  organizer?: Organizer;
+  organizerId: number | null;
+  organizer: Organizer;
 }
 
 

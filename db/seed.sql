@@ -1,4 +1,4 @@
-INSERT INTO Event (
+INSERT INTO events (
   book_title,
   isbn,
   category,

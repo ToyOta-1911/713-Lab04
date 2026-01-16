@@ -38,14 +38,14 @@ router.get("/", async(req, res) => {
      const pageNo = parseInt(req.query.pageNo as string) || 1;
      const totalEvents = await service.count();
      const keyword = req.query.keyword as string;
-    const result = await service.getAllEventsWithPagination(keyword,pageSize, pageNo);
+     const result = await service.getAllEventsWithPagination(keyword,pageSize, pageNo);
     try{
         const result = await service.getAllEventsWithPagination(keyword,pageSize, pageNo);
         if (result.events.length === 0) {
             res.status(404).send("No event found");
             return;
         }
-        res.setHeader("x-total-count", result.count.toString());
+        res.setHeader("x-total-count", result.totalCount .toString());
         res.json(result.events);
     } catch (error) {
     if (pageNo < 1 || pageSize < 1) {
